@@ -1,0 +1,35 @@
+stages:
+    - init
+    - fmt
+    - plan
+
+variables:
+  PROJECT_ID = "45249452"
+  TF_USERNAME ="cybergrizz88"
+  TF_PASSWORD = "glpat--fZ3iJ9t_G7rXVAiCpQA"
+  TF_ADDRESS = "https://gitlab.com/api/v4/projects/${PROJECT_ID}/terraform/state/old-state-name"
+
+init_job:
+  stage: init
+  script:
+    - terraform init
+    - backend-config=address=${TF_ADDRESS}
+    - backend-config=lock_address=${TF_ADDRESS}/lock 
+    - backend-config=unlock_address=${TF_ADDRESS}/lock 
+    - backend-config=username=${TF_USERNAME}
+    - backend-config=password=${TF_PASSWORD}
+    - backend-config=lock_method=POST
+    - backend-config=unlock_method=DELETE
+    - backend-config=retry_wait_min=5
+
+fmt_job:
+  stage: fmt
+  script:
+    - terraform fmt
+
+plan_job:
+  stage: plan
+  script:
+    - terrafrom plan
+  dependencies:
+    - init
