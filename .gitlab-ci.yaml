@@ -30,7 +30,7 @@ fmt_job:
 plan_job:
   stage: plan
   script:
-    - terrafrom plan
+    - terraform plan
   dependencies:
     - init
 
