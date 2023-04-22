@@ -34,7 +34,7 @@ plan_job:
   dependencies:
     - init
 
-    deploy:
+deploy:
   stage: deploy
   image: hashicorp/terraform:light
   script:
