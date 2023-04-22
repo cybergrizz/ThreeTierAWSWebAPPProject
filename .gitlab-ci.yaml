@@ -33,3 +33,15 @@ plan_job:
     - terrafrom plan
   dependencies:
     - init
+
+    deploy:
+  stage: deploy
+  image: hashicorp/terraform:light
+  script:
+    - terraform apply -auto-approve
+  dependencies: plan
+  environment:
+    name: production
+    url: https://staging.com
+  only:
+    - master
