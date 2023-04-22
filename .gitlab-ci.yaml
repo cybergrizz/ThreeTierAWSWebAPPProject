@@ -43,5 +43,3 @@ deploy:
   environment:
     name: production
     url: https://staging.com
-  only:
-    - master
