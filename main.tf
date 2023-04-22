@@ -3,13 +3,13 @@ resource "aws_s3_bucket_website_configuration" "web-app" {
   bucket = var.bucket_name
 
   tags = {
-  name = "Web App"
+    name = "Web App"
   }
 }
 
 resource "aws_s3_bucket_acl" "bucker_acl" {
   bucket = [aws_s3_bucket.web-app.id]
-  acl = "private"
+  acl    = "private"
 
 }
 
@@ -35,7 +35,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     prefix          = "myprefix"
   }
 
-    aliases = ["mysite.example.com", "yoursite.example.com"]
+  aliases = ["mysite.example.com", "yoursite.example.com"]
 
   default_cache_behavior {
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
@@ -175,7 +175,7 @@ resource "aws_cognito_user_pool" "cognito-pool" {
     enabled = true
   }
 
-    account_recovery_setting {
+  account_recovery_setting {
     recovery_mechanism {
       name     = var.recovery_mechanism_1
       priority = 1
@@ -240,39 +240,21 @@ resource "aws_iam_role" "cognito_role" {
 }
 
 
-#####VIRTUAL PRIVATE CLOUD TO ENSLOSE INFRASTRUCTURE TO HOST WEB APP USING A HASHICORP PREDEFINED MODULE#####
-module "terraform-vpc" {
-  source = "terraform-aws-modules/vpc/aws"
 
-  name = var.vpc_name
-  cidr = var.vpc_cidr
-
-  azs             = var.AZones
-  private_subnets = var.private_subnets
-  public_subnets  = var.public_subnets
-
-  enable_nat_gateway = true
-  enable_vpn_gateway = true
-
-  tags = {
-    Terraform   = "true"
-    Environment = "dev"
-  }
-}
 
 #####AUTO-SCALING GROUP#####
 resource "aws_launch_template" "alt-asg" {
-  name = var.asg_name
-  image_id      = var.ami
-  instance_type = var.instance_type
+  name                = var.asg_name
+  image_id            = var.ami
+  instance_type       = var.instance_type
   vpc_security_groups = [aws_security_group.lt-sg.id]
 }
 
 resource "aws_autoscaling_group" "asg" {
-  availability_zones = [var.AZones]
-  desired_capacity   = 1
-  max_size           = 1
-  min_size           = 1
+  availability_zones  = [var.AZones]
+  desired_capacity    = 1
+  max_size            = 1
+  min_size            = 1
   vpc_zone_identifier = [var.private_subnets, var.public_subnets]
 
   launch_template {
@@ -283,28 +265,28 @@ resource "aws_autoscaling_group" "asg" {
 
 #####SECURITY GROUP#####
 resource "aws_security_group" "alb-sg" {
-  name        = var.alb_sg_name
-  vpc_id      = aws_vpc.terraform-vpc.id
+  name   = var.alb_sg_name
+  vpc_id = aws_vpc.terraform-vpc.id
 
   ingress {
-    from_port        = var.http_port
-    to_port          = var.http_port
-    protocol         = "tcp"
-    cidr_blocks      = var.alb_sg_cidr_ingress
+    from_port   = var.http_port
+    to_port     = var.http_port
+    protocol    = "tcp"
+    cidr_blocks = var.alb_sg_cidr_ingress
   }
 
   ingress {
-    from_port        = var.ssh_port
-    to_port          = var.ssh_port
-    protocol         = "tcp"
-    cidr_blocks      =
+    from_port   = var.ssh_port
+    to_port     = var.ssh_port
+    protocol    = "tcp"
+    cidr_blocks = var.alb_sg_cidr_ingress
   }
 
   egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = var.alb_sg_cidr_egress
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = var.alb_sg_cidr_egress
   }
 
   tags = {
@@ -315,28 +297,28 @@ resource "aws_security_group" "alb-sg" {
 #####LT-Security Group####
 
 resource "aws_security_group" "lt-sg" {
-  name        = var.lt_sg_name
-  vpc_id      = aws_vpc.vpc.id
+  name   = var.lt_sg_name
+  vpc_id = aws_vpc.vpc.id
 
   ingress {
-    from_port        = var.http_port
-    to_port          = var.http_port
-    protocol         = "tcp"
+    from_port       = var.http_port
+    to_port         = var.http_port
+    protocol        = "tcp"
     security_groups = [aws_security_group.alb-sg.id]
   }
 
   ingress {
-    from_port        = var.ssh_port
-    to_port          = var.ssh_port
-    protocol         = "tcp"
+    from_port       = var.ssh_port
+    to_port         = var.ssh_port
+    protocol        = "tcp"
     security_groups = [aws_security_group.alb-sg.id]
   }
 
   egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = var.lt_sg_cidr_egress
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = var.lt_sg_cidr_egress
   }
 
   tags = {
@@ -346,9 +328,9 @@ resource "aws_security_group" "lt-sg" {
 
 #####LOAD BALANCER#####
 resource "aws_lb" "pub-sub-alb" {
-  name               = var.alb_name
-  security_groups    = [aws_security_group.lb-sg.id]
-  subnets            = var.public_subnets
+  name            = var.alb_name
+  security_groups = [aws_security_group.lb-sg.id]
+  subnets         = var.public_subnets
 
   tags = {
     name = "Pub-sub-alb"
@@ -363,11 +345,11 @@ resource "aws_lb_target_group" "alb-tg" {
 
   health_check {
     interval = 60
-    path = "/"
-    port  var.http_port
+    path     = "/"
+    port     = var.http_port
     protocol = "HTTP"
-    timeout =   30
-    matcher = "200,202"
+    timeout  = 30
+    matcher  = "200,202"
   }
 }
 
@@ -375,7 +357,7 @@ resource "aws_lb_listener" "alb_listener" {
   load_balancer_arn = aws_lb.pub-sub-alb.arn
   port              = var.http_port
   protocol          = "HTTP"
- vpc_id = aws_vpc.terraform-vpc.id
+  vpc_id            = aws_vpc.terraform-vpc.id
 
   default_action {
     type             = "forward"
@@ -384,15 +366,7 @@ resource "aws_lb_listener" "alb_listener" {
 }
 
 
-#####VIRTUAL MACHINE#####
-resource "aws_instance" "instance" {
-  ami           = var.ami
-  instance_type = var.instance_type
 
-  tags = {
-    Name = var.instance_name
-  }
-}
 
 #####DOMAIN REGISTRATION#####
 resource "aws_route53domains_registered_domain" "dns-name" {
