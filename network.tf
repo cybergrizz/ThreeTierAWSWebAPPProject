@@ -1,22 +1,3 @@
-#####STATIC WEBSITE STORED HERE#####
-resource "aws_s3_bucket_website_configuration" "web-app" {
-  bucket = var.bucket_name
-
-  tags = {
-    name = "Web App"
-  }
-}
-
-resource "aws_s3_bucket_acl" "bucker_acl" {
-  bucket = [aws_s3_bucket.web-app.id]
-  acl    = "private"
-
-}
-
-locals {
-  s3_origin_id = "myS3Origin"
-}
-
 resource "aws_cloudfront_distribution" "s3_distribution" {
   origin {
     domain_name              = aws_s3_bucket.web-app.bucket_regional_domain_name
@@ -119,129 +100,6 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   }
 }
 
-#####WEB APPLICATION FIREWALL#####
-
-resource "aws_wafv2_rule_group" "webapp_fw" {
-  name     = var.waf_name
-  scope    = var.waf_scope
-  capacity = 2
-
-  rule {
-    name     = "rule-1"
-    priority = 1
-
-    action {
-      allow {}
-    }
-
-    statement {
-
-      geo_match_statement {
-        country_codes = ["US", "NL"]
-      }
-    }
-
-    visibility_config {
-      cloudwatch_metrics_enabled = var.cw_enabled_boolean
-      metric_name                = var.cloudwatch_metric_rule_name
-      sampled_requests_enabled   = var.sr_enabled_boolean
-    }
-  }
-
-  visibility_config {
-    cloudwatch_metrics_enabled = var.cw_enabled_boolean
-    metric_name                = var.cloudwatch_metric_name
-    sampled_requests_enabled   = var.sr_enabled_boolean
-  }
-}
-
-
-
-#####COGNITO#####
-resource "aws_cognito_user_pool" "cognito-pool" {
-  name                     = var.cognito_name
-  auto_verified_attributes = ["email"]
-
-  mfa_configuration          = var.mfa_configuration
-  sms_authentication_message = var.mfa_sms_message
-
-  sms_configuration {
-    external_id    = var.sms_id
-    sns_caller_arn = aws_iam_role.cognito-role.arn
-    sns_region     = var.region
-  }
-
-  software_token_mfa_configuration {
-    enabled = true
-  }
-
-  account_recovery_setting {
-    recovery_mechanism {
-      name     = var.recovery_mechanism_1
-      priority = 1
-    }
-
-    recovery_mechanism {
-      name     = var.recovery_mechanism_2
-      priority = 2
-    }
-  }
-}
-
-resource "aws_cognito_identity_provider" "cognito-provider" {
-  user_pool_id  = aws_cognito_user_pool.cognito-pool.id
-  provider_name = var.provider_name_cog
-  provider_type = var.provider_type_cog
-
-}
-
-####IAM ROLE COGNITO####
-
-resource "aws_iam_role_policy" "test_policy" {
-  name = "test_policy"
-  role = aws_iam_role.cognito-role.id
-
-
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Action = [
-          "ec2:Describe*",
-        ]
-        Effect   = "Allow"
-        Resource = "*"
-      },
-    ]
-  })
-}
-
-resource "aws_iam_role" "cognito_role" {
-  name = var.iam_cognito_name
-
-
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Action = "sts:AssumeRole"
-        Effect = "Allow"
-        Sid    = ""
-        Principal = {
-          Service = "ec2.amazonaws.com"
-        }
-      },
-    ]
-  })
-
-  tags = {
-    tag-key = "tag-value"
-  }
-}
-
-
-
-
 #####AUTO-SCALING GROUP#####
 resource "aws_launch_template" "alt-asg" {
   name                = var.asg_name
@@ -262,39 +120,6 @@ resource "aws_autoscaling_group" "asg" {
     version = "$Latest"
   }
 }
-
-#####SECURITY GROUP#####
-resource "aws_security_group" "alb-sg" {
-  name   = var.alb_sg_name
-  vpc_id = aws_vpc.terraform-vpc.id
-
-  ingress {
-    from_port   = var.http_port
-    to_port     = var.http_port
-    protocol    = "tcp"
-    cidr_blocks = var.alb_sg_cidr_ingress
-  }
-
-  ingress {
-    from_port   = var.ssh_port
-    to_port     = var.ssh_port
-    protocol    = "tcp"
-    cidr_blocks = var.alb_sg_cidr_ingress
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = var.alb_sg_cidr_egress
-  }
-
-  tags = {
-    Name = "alb-sg"
-  }
-}
-
-
 
 #####LOAD BALANCER#####
 resource "aws_lb" "pub-sub-alb" {
@@ -334,8 +159,6 @@ resource "aws_lb_listener" "alb_listener" {
     target_group_arn = aws_lb_target_group.alb-tg.arn
   }
 }
-
-
 
 
 #####DOMAIN REGISTRATION#####
