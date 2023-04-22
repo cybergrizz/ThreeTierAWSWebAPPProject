@@ -294,37 +294,7 @@ resource "aws_security_group" "alb-sg" {
   }
 }
 
-#####LT-Security Group####
 
-resource "aws_security_group" "lt-sg" {
-  name   = var.lt_sg_name
-  vpc_id = aws_vpc.vpc.id
-
-  ingress {
-    from_port       = var.http_port
-    to_port         = var.http_port
-    protocol        = "tcp"
-    security_groups = [aws_security_group.alb-sg.id]
-  }
-
-  ingress {
-    from_port       = var.ssh_port
-    to_port         = var.ssh_port
-    protocol        = "tcp"
-    security_groups = [aws_security_group.alb-sg.id]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = var.lt_sg_cidr_egress
-  }
-
-  tags = {
-    Name = "lt-sg"
-  }
-}
 
 #####LOAD BALANCER#####
 resource "aws_lb" "pub-sub-alb" {
@@ -373,15 +343,3 @@ resource "aws_route53domains_registered_domain" "dns-name" {
   domain_name = var.domain_name
 }
 
-#####DATABASE TO STORE INFORMATION RECEIVED FROM WEB APPLICATION#####
-resource "aws_db_instance" "db-instance" {
-  allocated_storage    = 10
-  db_name              = var.db_name
-  engine               = "mysql"
-  engine_version       = "5.7"
-  instance_class       = "db.t3.micro"
-  username             = var.db_username
-  password             = var.db_pass
-  parameter_group_name = "default.mysql5.7"
-  skip_final_snapshot  = true
-}
