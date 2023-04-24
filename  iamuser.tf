@@ -19,7 +19,7 @@ resource "aws_iam_role_policy" "test_policy" {
   })
 }
 
-resource "aws_iam_role" "cognito_role" {
+resource "aws_iam_role" "cognito-role" {
   name = var.iam_cognito_name
 
 
