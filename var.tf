@@ -5,15 +5,17 @@ variable "instance_type" {
 }
 
 variable "public_subnets" {
-  type        = list(any)
-  default     = ["10.0.102.0/24", "10.0.103.0/24"]
-  description = "VPC public subnet"
+  default = {
+    "public-subnet-1" = 1
+    "public-subnet-2" = 2
+  }
 }
 
 variable "private_subnets" {
-  type        = list(any)
-  default     = ["10.0.2.0/24", "10.0.3.0/24"]
-  description = "VPC private subnet"
+  default = {
+    "private-subnet-1" = 1
+    "private-subnet-2" = 2
+  }
 }
 
 variable "AZones" {
@@ -220,3 +222,18 @@ variable "iam_cognito_name" {
 variable "db_username" {}
 
 variable "db_password" {}
+
+variable "tenancy" {
+  type    = string
+  default = "default"
+}
+
+variable "true" {
+  type    = bool
+  default = true
+}
+
+variable "cidr" {
+  type    = string
+  default = "0.0.0.0/0"
+}

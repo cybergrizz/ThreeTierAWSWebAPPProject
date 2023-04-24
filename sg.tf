@@ -2,7 +2,7 @@
 
 resource "aws_security_group" "lt-sg" {
   name   = var.lt_sg_name
-  vpc_id = aws_vpc.vpc.id
+  vpc_id = aws_vpc.terraform-vpc.id
 
   ingress {
     from_port       = var.http_port
@@ -22,7 +22,7 @@ resource "aws_security_group" "lt-sg" {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = var.lt_sg_cidr_egress
+    cidr_blocks = [var.cidr]
   }
 
   tags = {
@@ -39,21 +39,21 @@ resource "aws_security_group" "alb-sg" {
     from_port   = var.http_port
     to_port     = var.http_port
     protocol    = "tcp"
-    cidr_blocks = var.alb_sg_cidr_ingress
+    cidr_blocks = [var.cidr]
   }
 
   ingress {
     from_port   = var.ssh_port
     to_port     = var.ssh_port
     protocol    = "tcp"
-    cidr_blocks = var.alb_sg_cidr_ingress
+    cidr_blocks = [var.cidr]
   }
 
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = var.alb_sg_cidr_egress
+    cidr_blocks = [var.cidr]
   }
 
   tags = {

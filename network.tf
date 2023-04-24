@@ -1,3 +1,7 @@
+#Obtain availability zones
+data "aws_availability_zones" "available-azs" {
+  state = "available"
+}
 resource "aws_cloudfront_distribution" "s3_distribution" {
   origin {
     domain_name              = aws_s3_bucket.web-app.bucket_regional_domain_name
@@ -113,7 +117,7 @@ resource "aws_autoscaling_group" "asg" {
   desired_capacity    = 1
   max_size            = 1
   min_size            = 1
-  vpc_zone_identifier = [var.private_subnets, var.public_subnets]
+  vpc_zone_identifier = [var.public_subnets]
 
   launch_template {
     id      = aws_launch_template.alt-asg.id
