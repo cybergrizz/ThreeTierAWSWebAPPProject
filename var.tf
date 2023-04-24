@@ -60,18 +60,6 @@ variable "db_name" {
   description = "db instance name"
 }
 
-variable "db_username" {
-  type        = string
-  default     = "SilverFang88"
-  description = "database username"
-}
-
-variable "db_pass" {
-  type        = string
-  default     = "RandonStrongPassword123456!!!"
-  description = "database password"
-}
-
 variable "vpc_name" {
   type = string 
   default = "dad-joke-generator-vpc"
@@ -228,3 +216,7 @@ variable "iam_cognito_name" {
   default = "Dad-Joke-SMS-role"
   description = "IAM role for Cognito SMS"
 }
+
+variable "db_username" {}
+
+variable "db_password" {}
