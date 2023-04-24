@@ -80,7 +80,7 @@ variable "asg_name" {
   description = "dad joke asg name"
 }
 
-variable "alb_sg_name" {
+variable "sg_name" {
   type = string 
   default = "dad-joke-sg"
   description = "security groups name"
@@ -104,23 +104,28 @@ variable "ssh_port" {
   description = "port nyumber for SSH access"
 }
 
-variable "alb_sg_cidr_egress" {
-  type = list (string)
-  default = ["0.0.0.0/0"]
-  description = "List of CIDR blocks for ALB SG Egress"
+variable "tcp" {
+  type = string
+  default = "tcp"
+  description = "TCP protocol"
 }
 
-variable "alb_sg_cidr_ingress" {
-  type = list (string)
-  default = ["0.0.0.0/0"]
-  description = "List of CIDR blocks for ALB SG Ingress"
+variable "http" {
+  type = string
+  default = "HTTP"
+  description = "Http protocol"
 }
 
-variable "lt_sg_cidr_egress" {
-  type = list (string)
-  default = ["0.0.0.0/0"]
-  description = "List of CIDR blocks for LT SG Egress"
+variable "egress-all" {
+  type    = string
+  default = "0"
 }
+
+variable "egress" {
+  type    = string
+  default = "-1"
+}
+
 
 variable "alb_name" {
   type        = string
