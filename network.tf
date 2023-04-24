@@ -109,7 +109,7 @@ resource "aws_launch_template" "alt-asg" {
 }
 
 resource "aws_autoscaling_group" "asg" {
-  availability_zones  = [var.AZones]
+  availability_zones  = tolist(data.aws_availability_zones.available-azs.names)[each.value - 1]
   desired_capacity    = 1
   max_size            = 1
   min_size            = 1
