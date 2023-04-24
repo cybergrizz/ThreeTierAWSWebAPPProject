@@ -1,7 +1,4 @@
-#Obtain availability zones
-data "aws_availability_zones" "available-azs" {
-  state = "available"
-}
+
 resource "aws_cloudfront_distribution" "s3_distribution" {
   origin {
     domain_name              = aws_s3_bucket.web-app.bucket_regional_domain_name
