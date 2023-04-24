@@ -16,3 +16,12 @@ resource "aws_s3_bucket_acl" "bucker_acl" {
 locals {
   s3_origin_id = "myS3Origin"
 }
+
+resource "aws_s3_bucket" "web-app" {
+  bucket = var.bucket_name
+
+  tags = {
+    Name        = "My bucket"
+    Environment = "Dev"
+  }
+}
