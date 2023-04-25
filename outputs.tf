@@ -5,12 +5,12 @@ output "list_of_az" {
 
 #List of public subnet IDs
 output "public_subnet_id" {
-  value = data.aws_subnets.public[*].ids
+  value = data.aws_subnets.public-subnets-tf[*].ids
 }
 
 #List of private subnet IDs
 output "private_subnet_id" {
-  value = data.aws_subnets.private[*].ids
+  value = data.aws_subnets.private-subnets-tf[*].ids
 }
 
 #DB instance address

@@ -106,7 +106,7 @@ resource "aws_launch_template" "alt-asg" {
   name                = var.asg_name
   image_id            = var.ami
   instance_type       = var.instance_type
-  vpc_security_groups = [aws_security_group.lt-sg.id]
+  vpc_security_groups = [aws_security_group.terraform-sg.id]
 }
 
 resource "aws_autoscaling_group" "asg" {
@@ -125,7 +125,7 @@ resource "aws_autoscaling_group" "asg" {
 #####LOAD BALANCER#####
 resource "aws_lb" "pub-sub-alb" {
   name            = var.alb_name
-  security_groups = [aws_security_group.lb-sg.id]
+  security_groups = [aws_security_group.terraform-sg.id]
   subnets         = var.public_subnets
 
   tags = {
