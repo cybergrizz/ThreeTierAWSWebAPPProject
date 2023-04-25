@@ -29,9 +29,9 @@ resource "aws_route_table" "private-rtb" {
 
 #Create public route table associations
 resource "aws_route_table_association" "public" {
-  depends_on     = [aws_subnet.public-subnets-tf]
+  depends_on     = [aws_subnet.public-tf]
   route_table_id = aws_route_table.public-rtb.id
-  for_each       = aws_subnet.public-subnets-tf
+  for_each       = aws_subnet.public-tf
   subnet_id      = each.value.id
 }
 
