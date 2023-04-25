@@ -152,7 +152,6 @@ resource "aws_lb_listener" "alb_listener" {
   load_balancer_arn = aws_lb.pub-sub-alb.arn
   port              = var.http_port
   protocol          = "HTTP"
-  vpc_id            = aws_vpc.terraform-vpc.id
 
   default_action {
     type             = "forward"

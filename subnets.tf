@@ -3,7 +3,7 @@ data "aws_availability_zones" "available-azs" {
 }
 
 #Create 2 public subnets for webserver tier
-resource "aws_subnet" "public-subnets-tf" {
+resource "aws_subnets" "public-subnets-tf" {
   for_each                = var.public_subnets
   vpc_id                  = aws_vpc.terraform-vpc.id
   cidr_block              = cidrsubnet(var.vpc_cidr, 8, each.value + 100)
@@ -17,7 +17,7 @@ resource "aws_subnet" "public-subnets-tf" {
 }
 
 #Create 2 private subnets for RDS MySQL tier
-resource "aws_subnet" "private-subnets-tf" {
+resource "aws_subnets" "private-subnets-tf" {
   for_each                = var.private_subnets
   vpc_id                  = aws_vpc.terraform-vpc.id
   cidr_block              = cidrsubnet(var.vpc_cidr, 8, each.value)
