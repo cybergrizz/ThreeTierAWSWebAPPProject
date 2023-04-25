@@ -15,5 +15,5 @@ output "private_subnet_id" {
 
 #DB instance address
 output "db-address" {
-    value = aws_db_instance.mysql.address
+    value = aws_db_instance.db-instance.address
 }

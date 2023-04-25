@@ -6,7 +6,7 @@ data "aws_availability_zones" "available-azs" {
 resource "aws_subnet" "public-subnets-tf" {
   for_each                = var.public_subnets
   vpc_id                  = aws_vpc.terraform-vpc.id
-  cidr_block              = cidrsubnet(var.vpc-cidr, 8, each.value + 100)
+  cidr_block              = cidrsubnet(var.vpc_cidr, 8, each.value + 100)
   availability_zone       = tolist(data.aws_availability_zones.available-azs.names)[each.value - 1]
   map_public_ip_on_launch = true
 
@@ -20,7 +20,7 @@ resource "aws_subnet" "public-subnets-tf" {
 resource "aws_subnet" "private-subnets-tf" {
   for_each                = var.private_subnets
   vpc_id                  = aws_vpc.terraform-vpc.id
-  cidr_block              = cidrsubnet(var.vpc-cidr, 8, each.value)
+  cidr_block              = cidrsubnet(var.vpc_cidr, 8, each.value)
   availability_zone       = tolist(data.aws_availability_zones.available-azs.names)[each.value - 1]
   map_public_ip_on_launch = false
 
