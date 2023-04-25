@@ -242,3 +242,27 @@ variable "cidr" {
   type    = string
   default = "0.0.0.0/0"
 }
+
+variable "origin_access" {
+  type = string
+  default = "DJG-OAccess"
+  description = "Origin access id for DJG"
+}
+
+variable "origin_access_type" {
+  type = string
+  default = "S3"
+  description = "Origin access type for DJG"
+}
+
+variable "signing_behavior" {
+  type = string
+  default = "always"
+  description = "Signing behavior for Clour Front"
+}
+
+variable "signing_protocol" {
+  type = string
+  default = "sigv4"
+  description = "Signing protocol for Clour Front"
+}

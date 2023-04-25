@@ -106,7 +106,6 @@ resource "aws_launch_template" "alt-asg" {
   name                = var.asg_name
   image_id            = var.ami
   instance_type       = var.instance_type
-  vpc_security_groups = [aws_security_group.terraform-sg.id]
 }
 
 resource "aws_autoscaling_group" "asg" {
@@ -167,3 +166,9 @@ resource "aws_route53domains_registered_domain" "dns-name" {
   domain_name = var.domain_name
 }
 
+resource "aws_cloudfront_origin_access_control" "origin-access-tf" {
+  name                              = var.origin_access
+  origin_access_control_origin_type = var.origin_access_type
+  signing_behavior                  = var.signing_behavior
+  signing_protocol                  = var.signing_protocol
+}
