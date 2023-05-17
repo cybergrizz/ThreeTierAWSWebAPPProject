@@ -2,7 +2,13 @@ data "aws_availability_zones" "available-azs" {
   state = "available"
 }
 
+data "aws_subnet" "public-tf" {
+  id = var.public_subnets
+}
 
+data "aws_subnet" "private-tf" {
+  id = var.private_subnets
+}
 
 #Create 2 public subnets for webserver tier
 resource "aws_subnet" "public-tf" {
