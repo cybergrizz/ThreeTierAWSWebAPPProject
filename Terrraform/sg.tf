@@ -56,7 +56,7 @@ resource "aws_security_group" "terraform-sg" {
     protocol    = var.egress
     cidr_blocks = [var.cidr]
   }
-  
+
   lifecycle {
     create_before_destroy = true
   }

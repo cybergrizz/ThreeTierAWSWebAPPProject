@@ -103,9 +103,9 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 
 #####AUTO-SCALING GROUP#####
 resource "aws_launch_template" "alt-asg" {
-  name                = var.asg_name
-  image_id            = var.ami
-  instance_type       = var.instance_type
+  name          = var.asg_name
+  image_id      = var.ami
+  instance_type = var.instance_type
 }
 
 resource "aws_autoscaling_group" "asg" {
@@ -113,7 +113,6 @@ resource "aws_autoscaling_group" "asg" {
   desired_capacity    = 1
   max_size            = 1
   min_size            = 1
-  vpc_zone_identifier = [var.public_subnets]
 
   launch_template {
     id      = aws_launch_template.alt-asg.id
@@ -125,7 +124,7 @@ resource "aws_autoscaling_group" "asg" {
 resource "aws_lb" "pub-sub-alb" {
   name            = var.alb_name
   security_groups = [aws_security_group.terraform-sg.id]
-  subnets         = var.public_subnets
+  subnets         = ["var.public_subnets"]
 
   tags = {
     name = "Pub-sub-alb"

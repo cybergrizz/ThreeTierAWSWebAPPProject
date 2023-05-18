@@ -63,56 +63,56 @@ variable "db_name" {
 }
 
 variable "vpc_name" {
-  type = string 
-  default = "dad-joke-generator-vpc"
+  type        = string
+  default     = "dad-joke-generator-vpc"
   description = "dad joke vpc name"
 }
 
 variable "vpc_cidr" {
-  type = string
-  default = "10.0.0.0/16"
+  type        = string
+  default     = "10.0.0.0/16"
   description = "vpc cidr block id"
 }
 
 variable "asg_name" {
-  type = string 
-  default = "dad-joke-asg"
+  type        = string
+  default     = "dad-joke-asg"
   description = "dad joke asg name"
 }
 
 variable "sg_name" {
-  type = string 
-  default = "dad-joke-sg"
+  type        = string
+  default     = "dad-joke-sg"
   description = "security groups name"
 }
 
 variable "lt_sg_name" {
-  type = string 
-  default = "dad-joke-lt-sg"
+  type        = string
+  default     = "dad-joke-lt-sg"
   description = "launch template security groups name"
 }
 
 variable "http_port" {
-  type = number 
-  default = 80
+  type        = number
+  default     = 80
   description = "HTTP port for sg access"
 }
 
 variable "ssh_port" {
-  type = number 
-  default = 22
+  type        = number
+  default     = 22
   description = "port nyumber for SSH access"
 }
 
 variable "tcp" {
-  type = string
-  default = "tcp"
+  type        = string
+  default     = "tcp"
   description = "TCP protocol"
 }
 
 variable "http" {
-  type = string
-  default = "HTTP"
+  type        = string
+  default     = "HTTP"
   description = "Http protocol"
 }
 
@@ -129,7 +129,7 @@ variable "egress" {
 
 variable "alb_name" {
   type        = string
-  default     = "Dad Joke Load Balancer"
+  default     = "Dad-Joke-Load-Balancer"
   description = "Load balancer for Web App"
 }
 
@@ -140,26 +140,26 @@ variable "alb_tg_name" {
 }
 
 variable "waf_name" {
-  type = string 
-  default = "Dad-Joke-WAF"
+  type        = string
+  default     = "Dad-Joke-WAF"
   description = "Name of Dad Joke WAF"
 }
 
 variable "waf_scope" {
-  type = string 
-  default = "CLOUDFRONT"
+  type        = string
+  default     = "CLOUDFRONT"
   description = "WAF Scope"
 }
 
 variable "cloudwatch_metric_rule_name" {
-  type = string 
-  default = "Dad-Joke-CW-Metrics-For-Rule"
+  type        = string
+  default     = "Dad-Joke-CW-Metrics-For-Rule"
   description = "Metric name for CloudWatch Rule"
 }
 
 variable "cloudwatch_metric_name" {
-  type = string 
-  default = "Dad-Joke-CW-Metrics"
+  type        = string
+  default     = "Dad-Joke-CW-Metrics"
   description = "Metric name for CloudWatch"
 }
 variable "cw_enabled_boolean" {
@@ -190,25 +190,25 @@ variable "cidr" {
 }
 
 variable "origin_access" {
-  type = string
-  default = "DJG-OAccess"
+  type        = string
+  default     = "DJG-OAccess"
   description = "Origin access id for DJG"
 }
 
 variable "origin_access_type" {
-  type = string
-  default = "S3"
+  type        = string
+  default     = "S3"
   description = "Origin access type for DJG"
 }
 
 variable "signing_behavior" {
-  type = string
-  default = "always"
+  type        = string
+  default     = "always"
   description = "Signing behavior for Clour Front"
 }
 
 variable "signing_protocol" {
-  type = string
-  default = "sigv4"
+  type        = string
+  default     = "sigv4"
   description = "Signing protocol for Clour Front"
 }
