@@ -197,7 +197,7 @@ variable "origin_access" {
 
 variable "origin_access_type" {
   type        = string
-  default     = "S3"
+  default     = "s3"
   description = "Origin access type for DJG"
 }
 
