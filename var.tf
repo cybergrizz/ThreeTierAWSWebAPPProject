@@ -170,60 +170,6 @@ variable "sr_enabled_boolean" {
   default = true
 }
 
-variable "cognito_name" {
-  type = string 
-  default = "Dad-Joke_cognito_pool"
-  description = "Name for Cognito pool"
-}
-
-variable "provider_type_cog" {
-  type = string 
-  default = "GOOGLE"
-  description = "Provider type for Cognito Pool"
-} 
-
-variable "provider_name_cog" {
-  type = string 
-  default = "GOOGLE"
-  description = "Provider name for Cognito"
-}
-
-variable "mfa_sms_message" {
-  type = string 
-  default = "Your code is {*********}"
-  description = "Message code for MFA SMS"
-}
-
-variable "mfa_configuration" {
-  type = string 
-  default = "ON"
-  description = "MFA configuration"
-}
-
-variable "sms_id" {
-  type = string
-  default = "Dad-Joke-SMS-iD"
-  description = "SMS iD"
-}
-
-variable "recovery_mechanism_1" {
-  type = string
-  default = "verified_email"
-  description = "1st Recovery path for account"
-}
-
-variable "recovery_mechanism_2" {
-  type = string
-  default = "verified_phone_number"
-  description = "2nd Recovery path for account"
-}
-
-variable "iam_cognito_name" {
-  type = string 
-  default = "Dad-Joke-SMS-role"
-  description = "IAM role for Cognito SMS"
-}
-
 variable "db_username" {}
 
 variable "db_password" {}
